@@ -101,7 +101,7 @@
                         <span class="ml-auto px-2 py-1 bg-green-400 text-xs rounded-full">{{ App\Models\Category::count() }}</span>
                     </a>
                     
-                    <a href="#" class="flex items-center space-x-3 p-4 hover:bg-white/15 rounded-xl transition-all duration-200 group">
+                    <a href="{{ route('admin.loans.index') }}" class="flex items-center space-x-3 p-4 hover:bg-white/15 rounded-xl transition-all duration-200 group">
                         <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                             <i class="fas fa-users text-white"></i>
                         </div>

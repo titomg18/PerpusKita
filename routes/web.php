@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BookController;
+use App\Http\Controllers\Admin\LoanController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -46,4 +47,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', \App\Http\Middleware
     // API route untuk books
     Route::get('/api/books', [BookController::class, 'getBooks'])
         ->name('books.api');
+
+    // Loan Routes
+    Route::resource('loans', LoanController::class)->only(['index', 'store', 'destroy']);
+    Route::post('/loans/{id}/return', [LoanController::class, 'returnBook'])->name('loans.return');
+    
+    // API routes for dropdowns in loans
+    Route::get('/api/users/search', [LoanController::class, 'getUsers'])->name('users.api.search');
+    Route::get('/api/books/search', [LoanController::class, 'getBooks'])->name('books.api.search');
 });

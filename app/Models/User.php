@@ -21,4 +21,13 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    /**
+     * Relasi ke peminjaman
+     * added loans relationship
+     */
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
 }
