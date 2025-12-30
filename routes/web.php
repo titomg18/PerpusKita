@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\BooksController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BookController;
@@ -27,6 +28,8 @@ Route::post('/logout', [AuthController::class, 'logout'])
 /* USER DASHBOARD */
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // User books listing
+    Route::get('/books', [BooksController::class, 'index'])->name('books.index');
 });
 
 /* ADMIN ROUTES */
