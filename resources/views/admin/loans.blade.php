@@ -584,25 +584,44 @@
                                                     Dipinjam
                                                 </span>
                                             @endif
-                                        @else
+                                        @elseif($loan->status == 'request_return')
+                                            <span class="inline-flex items-center px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase tracking-tighter">
+                                                <i class="fas fa-exclamation-circle mr-1 text-xs"></i>
+                                                Permintaan Pengembalian
+                                            </span>
+                                        @elseif($loan->status == 'dikembalikan')
                                             <span class="inline-flex items-center px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full uppercase tracking-tighter">
                                                 <i class="fas fa-check-circle mr-1 text-xs"></i>
                                                 Kembali
                                             </span>
+                                        @else
+                                            <span class="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-800 text-xs font-bold rounded-full uppercase tracking-tighter">{{ $loan->status }}</span>
                                         @endif
                                     </td>
                                     <td class="py-4 px-4">
                                         <div class="flex items-center space-x-2">
                                             @if($loan->status == 'dipinjam')
-                                            <form action="{{ route('admin.loans.return', $loan->id) }}" method="POST" onsubmit="return confirm('Konfirmasi pengembalian buku?')">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center hover:bg-emerald-600 hover:text-white transition-all duration-200" title="Kembalikan Buku">
-                                                    <i class="fas fa-check text-xs"></i>
-                                                </button>
-                                            </form>
+                                                <form action="{{ route('admin.loans.return', $loan->id) }}" method="POST" onsubmit="return confirm('Konfirmasi pengembalian buku?')">
+                                                        @csrf
+                                                        <button type="submit" class="w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center hover:bg-emerald-600 hover:text-white transition-all duration-200" title="Tandai Kembali">
+                                                        <i class="fas fa-check text-xs"></i>
+                                                    </button>
+                                                </form>
+                                            @elseif($loan->status == 'request_return')
+                                                <form action="{{ route('admin.loans.approveReturn', $loan->id) }}" method="POST" onsubmit="return confirm('Setujui pengembalian buku ini?')">
+                                                    @csrf
+                                                    <button type="submit" class="w-8 h-8 bg-green-50 text-green-600 rounded-lg flex items-center justify-center hover:bg-green-600 hover:text-white transition-all duration-200" title="Setujui">
+                                                        <i class="fas fa-check text-xs"></i>
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('admin.loans.rejectReturn', $loan->id) }}" method="POST" onsubmit="return confirm('Tolak permintaan pengembalian ini?')">
+                                                    @csrf
+                                                    <button type="submit" class="w-8 h-8 bg-red-50 text-red-600 rounded-lg flex items-center justify-center hover:bg-red-600 hover:text-white transition-all duration-200" title="Tolak">
+                                                        <i class="fas fa-times text-xs"></i>
+                                                    </button>
+                                                </form>
                                             @endif
-                                            
+
                                             <form action="{{ route('admin.loans.destroy', $loan->id) }}" method="POST" onsubmit="return confirm('Hapus riwayat peminjaman ini?')">
                                                 @csrf
                                                 @method('DELETE')

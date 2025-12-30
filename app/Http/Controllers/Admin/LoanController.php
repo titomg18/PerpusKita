@@ -85,6 +85,45 @@ class LoanController extends Controller
     }
 
     /**
+     * Approve a user's return request (admin)
+     */
+    public function approveReturn($id)
+    {
+        $loan = Loan::findOrFail($id);
+
+        if ($loan->status !== 'request_return') {
+            return back()->with('error', 'Tidak ada permintaan pengembalian untuk peminjaman ini.');
+        }
+
+        $loan->update([
+            'status' => 'dikembalikan',
+            'return_date' => Carbon::now()->toDateString(),
+        ]);
+
+        $loan->book->increment('stock');
+
+        return back()->with('success', 'Permintaan pengembalian disetujui. Buku dikembalikan.');
+    }
+
+    /**
+     * Reject a user's return request (admin)
+     */
+    public function rejectReturn($id)
+    {
+        $loan = Loan::findOrFail($id);
+
+        if ($loan->status !== 'request_return') {
+            return back()->with('error', 'Tidak ada permintaan pengembalian untuk peminjaman ini.');
+        }
+
+        $loan->update([
+            'status' => 'dipinjam',
+        ]);
+
+        return back()->with('success', 'Permintaan pengembalian ditolak. Status kembali ke dipinjam.');
+    }
+
+    /**
      * Menghapus data peminjaman
      */
     public function destroy($id)

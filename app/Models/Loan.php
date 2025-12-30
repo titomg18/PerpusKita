@@ -58,7 +58,16 @@ class Loan extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return $this->status === 'dipinjam' ? 'Sedang Dipinjam' : 'Sudah Dikembalikan';
+        switch ($this->status) {
+            case 'dipinjam':
+                return 'Sedang Dipinjam';
+            case 'request_return':
+                return 'Menunggu Persetujuan';
+            case 'dikembalikan':
+                return 'Dikembalikan';
+            default:
+                return ucfirst($this->status ?? '');
+        }
     }
 
     /**
@@ -66,6 +75,15 @@ class Loan extends Model
      */
     public function getStatusColorAttribute(): string
     {
-        return $this->status === 'dipinjam' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800';
+        switch ($this->status) {
+            case 'dipinjam':
+                return 'bg-blue-100 text-blue-800';
+            case 'request_return':
+                return 'bg-amber-100 text-amber-800';
+            case 'dikembalikan':
+                return 'bg-gray-100 text-gray-800';
+            default:
+                return 'bg-gray-100 text-gray-800';
+        }
     }
 }
