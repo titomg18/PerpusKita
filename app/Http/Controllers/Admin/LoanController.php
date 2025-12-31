@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Loan;
 use App\Models\Book;
 use App\Models\User;
+use App\Models\Fine;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -73,10 +74,13 @@ class LoanController extends Controller
             return back()->with('error', 'Buku sudah dikembalikan sebelumnya.');
         }
 
+        $returnDate = Carbon::now();
         $loan->update([
-            'return_date' => Carbon::now()->toDateString(),
+            'return_date' => $returnDate->toDateString(),
             'status' => 'dikembalikan',
         ]);
+
+        $this->calculateFine($loan, $returnDate);
 
         // Tambah stok buku kembali
         $loan->book->increment('stock');
@@ -95,10 +99,13 @@ class LoanController extends Controller
             return back()->with('error', 'Tidak ada permintaan pengembalian untuk peminjaman ini.');
         }
 
+        $returnDate = Carbon::now();
         $loan->update([
             'status' => 'dikembalikan',
-            'return_date' => Carbon::now()->toDateString(),
+            'return_date' => $returnDate->toDateString(),
         ]);
+
+        $this->calculateFine($loan, $returnDate);
 
         $loan->book->increment('stock');
 
@@ -166,5 +173,26 @@ class LoanController extends Controller
             ->get(['id', 'title', 'stock']);
         
         return response()->json($books);
+    }
+
+    /**
+     * Helper untuk menghitung denda
+     */
+    private function calculateFine($loan, $returnDate)
+    {
+        $dueDate = Carbon::parse($loan->due_date);
+        
+        if ($returnDate->gt($dueDate)) {
+            $daysLate = $returnDate->diffInDays($dueDate);
+            $finePerDay = 1000; // Bisa disesuaikan
+            $totalFine = $daysLate * $finePerDay;
+
+            Fine::create([
+                'loan_id' => $loan->id,
+                'days_late' => $daysLate,
+                'fine_amount' => $totalFine,
+                'status' => 'belum dibayar',
+            ]);
+        }
     }
 }

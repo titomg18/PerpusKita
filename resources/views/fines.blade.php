@@ -391,7 +391,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
-                                <!-- Baris 1 -->
+                                @forelse($fines as $fine)
                                 <tr class="hover:bg-gray-50 transition-colors">
                                     <td class="py-4 px-6">
                                         <div class="flex items-center">
@@ -399,177 +399,55 @@
                                                 <i class="fas fa-exclamation text-rose-600"></i>
                                             </div>
                                             <div>
-                                                <p class="font-semibold text-gray-900">F-0012</p>
-                                                <p class="text-xs text-gray-500">12 Mar 2024</p>
+                                                <p class="font-semibold text-gray-900">{{ 'F-' . $fine->id }}</p>
+                                                <p class="text-xs text-gray-500">{{ $fine->created_at->format('d M Y') }}</p>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="py-4 px-6">
-                                        <p class="font-medium text-gray-900">Machine Learning for Beginners</p>
-                                        <p class="text-sm text-gray-600">Oleh: Andrew Ng</p>
+                                        <p class="font-medium text-gray-900">{{ $fine->loan->book->title ?? '-' }}</p>
+                                        <p class="text-sm text-gray-600">Oleh: {{ $fine->loan->book->author ?? '-' }}</p>
                                     </td>
                                     <td class="py-4 px-6">
-                                        <p class="text-gray-900">15 Maret 2024</p>
+                                        <p class="text-gray-900">{{ optional($fine->loan->due_date)->format('d F Y') ?? '-' }}</p>
                                         <p class="text-xs text-gray-500">Jatuh tempo</p>
                                     </td>
                                     <td class="py-4 px-6">
-                                        <p class="text-gray-900">5 Hari</p>
-                                        <p class="text-xs text-gray-500">Rp 5.000/hari</p>
+                                        <p class="text-gray-900">{{ $fine->days_late }} Hari</p>
+                                        <p class="text-xs text-gray-500">Rp {{ number_format($fine->fine_amount / max($fine->days_late,1),0,',','.') }}/hari</p>
                                     </td>
                                     <td class="py-4 px-6">
-                                        <p class="font-bold text-gray-900">Rp 25.000</p>
+                                        <p class="font-bold text-gray-900">Rp {{ number_format($fine->fine_amount,0,',','.') }}</p>
                                     </td>
                                     <td class="py-4 px-6">
-                                        <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full inline-flex items-center">
-                                            <i class="fas fa-clock mr-1"></i> Belum Dibayar
-                                        </span>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <div class="flex space-x-2">
-                                            <button onclick="openPaymentModal()" class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-lg hover:bg-emerald-200 transition-colors">
-                                                Bayar
-                                            </button>
-                                            <button class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-lg hover:bg-blue-200 transition-colors">
-                                                Detail
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Baris 2 -->
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="py-4 px-6">
-                                        <div class="flex items-center">
-                                            <div class="w-10 h-10 bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center mr-3">
-                                                <i class="fas fa-check text-green-600"></i>
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold text-gray-900">F-0011</p>
-                                                <p class="text-xs text-gray-500">5 Mar 2024</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="font-medium text-gray-900">Web Development with Laravel</p>
-                                        <p class="text-sm text-gray-600">Oleh: Taylor Otwell</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="text-gray-900">1 Maret 2024</p>
-                                        <p class="text-xs text-gray-500">Jatuh tempo</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="text-gray-900">7 Hari</p>
-                                        <p class="text-xs text-gray-500">Rp 5.000/hari</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="font-bold text-gray-900">Rp 35.000</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full inline-flex items-center">
-                                            <i class="fas fa-check mr-1"></i> Sudah Dibayar
-                                        </span>
+                                        @if($fine->status === 'dibayar')
+                                            <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full inline-flex items-center">
+                                                <i class="fas fa-check mr-1"></i> Sudah Dibayar
+                                            </span>
+                                        @else
+                                            <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full inline-flex items-center">
+                                                <i class="fas fa-clock mr-1"></i> Belum Dibayar
+                                            </span>
+                                        @endif
                                     </td>
                                     <td class="py-4 px-6">
                                         <div class="flex space-x-2">
-                                            <button class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-lg hover:bg-blue-200 transition-colors">
-                                                Detail
-                                            </button>
-                                            <button class="px-3 py-1 bg-gray-100 text-gray-800 text-xs font-semibold rounded-lg hover:bg-gray-200 transition-colors">
-                                                Invoice
-                                            </button>
+                                            @if($fine->status !== 'dibayar')
+                                            <form action="{{ route('fines.pay', $fine->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-lg hover:bg-emerald-200 transition-colors">Bayar</button>
+                                            </form>
+                                            @endif
+
+                                            <button class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-lg hover:bg-blue-200 transition-colors">Detail</button>
                                         </div>
                                     </td>
                                 </tr>
-                                
-                                <!-- Baris 3 -->
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="py-4 px-6">
-                                        <div class="flex items-center">
-                                            <div class="w-10 h-10 bg-gradient-to-br from-rose-100 to-rose-200 rounded-lg flex items-center justify-center mr-3">
-                                                <i class="fas fa-exclamation text-rose-600"></i>
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold text-gray-900">F-0010</p>
-                                                <p class="text-xs text-gray-500">28 Feb 2024</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="font-medium text-gray-900">Data Science Handbook</p>
-                                        <p class="text-sm text-gray-600">Oleh: Jake VanderPlas</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="text-gray-900">25 Februari 2024</p>
-                                        <p class="text-xs text-gray-500">Jatuh tempo</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="text-gray-900">10 Hari</p>
-                                        <p class="text-xs text-gray-500">Rp 5.000/hari</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="font-bold text-gray-900">Rp 50.000</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full inline-flex items-center">
-                                            <i class="fas fa-clock mr-1"></i> Belum Dibayar
-                                        </span>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <div class="flex space-x-2">
-                                            <button onclick="openPaymentModal()" class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-lg hover:bg-emerald-200 transition-colors">
-                                                Bayar
-                                            </button>
-                                            <button class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-lg hover:bg-blue-200 transition-colors">
-                                                Detail
-                                            </button>
-                                        </div>
-                                    </td>
+                                @empty
+                                <tr>
+                                    <td colspan="7" class="text-center py-6 text-gray-500">Anda belum memiliki denda.</td>
                                 </tr>
-                                
-                                <!-- Baris 4 -->
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="py-4 px-6">
-                                        <div class="flex items-center">
-                                            <div class="w-10 h-10 bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center mr-3">
-                                                <i class="fas fa-check text-green-600"></i>
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold text-gray-900">F-0009</p>
-                                                <p class="text-xs text-gray-500">20 Feb 2024</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="font-medium text-gray-900">Mobile App Development</p>
-                                        <p class="text-sm text-gray-600">Oleh: Chris Smith</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="text-gray-900">15 Februari 2024</p>
-                                        <p class="text-xs text-gray-500">Jatuh tempo</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="text-gray-900">3 Hari</p>
-                                        <p class="text-xs text-gray-500">Rp 5.000/hari</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <p class="font-bold text-gray-900">Rp 15.000</p>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full inline-flex items-center">
-                                            <i class="fas fa-check mr-1"></i> Sudah Dibayar
-                                        </span>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <div class="flex space-x-2">
-                                            <button class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-lg hover:bg-blue-200 transition-colors">
-                                                Detail
-                                            </button>
-                                            <button class="px-3 py-1 bg-gray-100 text-gray-800 text-xs font-semibold rounded-lg hover:bg-gray-200 transition-colors">
-                                                Invoice
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
