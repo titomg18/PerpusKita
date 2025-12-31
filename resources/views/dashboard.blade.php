@@ -88,14 +88,14 @@
                         <span class="ml-auto px-2 py-1 bg-red-400 text-xs rounded-full">3</span>
                     </a>
                     
-                    <a href="#" class="flex items-center space-x-3 p-4 hover:bg-white/15 rounded-xl transition-all duration-200 group">
+                    <a href="/history" class="flex items-center space-x-3 p-4 hover:bg-white/15 rounded-xl transition-all duration-200 group">
                         <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                             <i class="fas fa-history text-white"></i>
                         </div>
                         <span class="text-white/90">Riwayat</span>
                     </a>
                     
-                    <a href="#" class="flex items-center space-x-3 p-4 hover:bg-white/15 rounded-xl transition-all duration-200 group">
+                    <a href="/fines" class="flex items-center space-x-3 p-4 hover:bg-white/15 rounded-xl transition-all duration-200 group">
                         <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                             <i class="fas fa-money-bill-alt text-white"></i>
                         </div>
