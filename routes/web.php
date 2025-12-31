@@ -33,6 +33,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/books', [BooksController::class, 'index'])->name('books.index');
     // User loans
     Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
+    // History route - menampilkan semua peminjaman yang sedang "dipinjam"
+    Route::get('/history', function() {
+        $loans = \App\Models\Loan::with(['user', 'book'])
+            ->where('status', 'dipinjam')
+            ->get();
+
+        $usersCount = $loans->pluck('user_id')->unique()->count();
+        $booksCount = $loans->count();
+        $overdueCount = $loans->filter(function($l) { return $l->due_date->lt(now()); })->count();
+
+        return view('history', compact('loans', 'usersCount', 'booksCount', 'overdueCount'));
+    })->name('history');
     Route::post('/loans/{id}/request-return', [LoanController::class, 'requestReturn'])->name('loans.requestReturn');
 });
 

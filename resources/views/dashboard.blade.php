@@ -73,14 +73,14 @@
                         <span class="font-semibold text-white">Dashboard</span>
                     </a>
                     
-                    <a href="#" class="flex items-center space-x-3 p-4 hover:bg-white/15 rounded-xl transition-all duration-200 group">
+                    <a href="/books" class="flex items-center space-x-3 p-4 hover:bg-white/15 rounded-xl transition-all duration-200 group">
                         <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                             <i class="fas fa-book text-white"></i>
                         </div>
                         <span class="text-white/90">Data Buku</span>
                     </a>
                     
-                    <a href="#" class="flex items-center space-x-3 p-4 hover:bg-white/15 rounded-xl transition-all duration-200 group">
+                    <a href="/loans" class="flex items-center space-x-3 p-4 hover:bg-white/15 rounded-xl transition-all duration-200 group">
                         <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                             <i class="fas fa-exchange-alt text-white"></i>
                         </div>
